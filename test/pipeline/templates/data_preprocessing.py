@@ -180,6 +180,36 @@ class Dumminizer(BaseEstimator, TransformerMixin):
             X = X.drop(var, 1)
         return X
 
+class Scaler(BaseEstimator, TransformerMixin):
+
+    """ A transformer that returns DataFrame 
+    with scaled variables via MinMaxScaler sklearn class.
+
+    Parameters
+    ----------
+    columns_to_scale: list, default=None
+
+    """
+
+    def __init__(self, columns_to_scale):
+        if not isinstance(columns_to_dummies, list):
+            logging.error('The config file is corrupted in features key!')
+            sys.exit(1)
+        else:
+            self.columns_to_scale = columns_to_scale
+
+    # We have fit method cause Sklearn Pipeline
+    def fit(self, X, y=None):
+        return self
+
+    def transform(self, X):
+        X = X.copy()
+        scaler = MinMaxScaler()
+        scaler.fit(X[self.columns_to_scale])
+        X[self.columns_to_scale] = scaler.transform(X[self.columns_to_scale])
+        return X
+
+
 
     # def Scaler(self, data, columns_to_scale):
     #     '''
