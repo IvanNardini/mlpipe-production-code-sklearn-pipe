@@ -242,7 +242,7 @@ class Balancer(BaseEstimator, TransformerMixin):
 
     def transform(self, X):
         X = X.copy()
-        X, y = self.smote.fit_resample(X[features_selected], X[target])
+        X, y = self.smote.fit_resample(X[self.features_selected], X[self.target])
         return X, y
 
         
