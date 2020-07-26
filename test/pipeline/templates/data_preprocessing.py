@@ -218,7 +218,7 @@ class Splitter_Balanced_Data(BaseEstimator, TransformerMixin):
         self.features_selected = features_selected
         self.target = target
         self.random_state_smote = 0
-        self.smote = SMOTE(random_state=self.random_state)
+        self.smote = SMOTE(random_state=self.random_state_smote)
         self.test_size = 0.1
         self.random_state_sample = 0
 
