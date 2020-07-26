@@ -5,7 +5,7 @@ from sklearn.ensemble import RandomForestClassifier
 #Sklearn pipeline
 from sklearn.base import BaseEstimator, ClassifierMixin
 
-class Classifier(ClassifierMixin, BaseEstimator):
+class Classifier(BaseEstimator, ClassifierMixin):
 
     def __init__(self):
         self.rfor = None
