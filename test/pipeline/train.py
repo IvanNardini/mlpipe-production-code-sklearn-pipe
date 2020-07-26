@@ -22,7 +22,7 @@ def train():
     # Read Data
     Data = pd.read_csv(config['paths']['data_path'])
     #Train Pipeline
-    model_pipeline.fit(Data, config['target'])
+    model_pipeline.fit(Data)
     #Save Model
     # PostProcessing.save(Pipeline, config['paths']['pipe_path'])
 
