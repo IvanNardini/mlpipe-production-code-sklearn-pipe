@@ -23,7 +23,11 @@ model_pipeline = Pipeline(
                                                  renamed_columns=config['renamed_columns'])), 
         
         ('Impute_Missing', Data_Prep.Missing_Imputer(missing_predictors=config['missing_predictors'], 
-                                                     replace='missing'))
+                                                     replace='missing')), 
+        
+        ('Binning_Variables', Data_Prep.Binner(binning_meta=config['binning_meta'])), 
+
+        ('Encoding_Variables', Data_Prep.Encoder(encoding_meta=config['encoding_meta']))
     ]
 )
 

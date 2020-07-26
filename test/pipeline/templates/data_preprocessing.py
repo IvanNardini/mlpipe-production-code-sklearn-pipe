@@ -54,7 +54,8 @@ class Data_Preparer(BaseEstimator, TransformerMixin):
 
 class Missing_Imputer(BaseEstimator, TransformerMixin):
 
-    """ A transformer that returns impute missings.
+    """ A transformer that returns DataFrame
+    with missings imputed.
 
     Parameters
     ----------
@@ -81,18 +82,66 @@ class Missing_Imputer(BaseEstimator, TransformerMixin):
             X[var] = X[var].replace('?', self.replace)
         return X
 
-    #     
-    # def Binner(self, data, binning_meta):
-    #     '''
-    #     Create bins based on variable distributions
-    #     :params: data, var, new_var_name, bins, bins_labels
-    #     :return: DataFrame
-    #     '''
-    #     data = data.copy()
-    #     for var, meta in binning_meta.items():
-    #         data[meta['var_name']] = pd.cut(data[var], bins = meta['bins'], labels=meta['bins_labels'], include_lowest= True)
-    #         data.drop(var, axis=1, inplace=True)
-    #     return data
+class Binner(BaseEstimator, TransformerMixin):
+
+    """ A transformer that returns DataFrame 
+    with bins based on variable distributions.
+
+    Parameters
+    ----------
+    binning_meta : list, default=None
+
+    """
+
+    def __init__(self, binning_meta=None):
+        if not isinstance(binning_meta, dict):
+            logging.error('The config file is corrupted in binning_meta key!')
+            sys.exit(1)
+        else:
+            self.binning_meta = binning_meta
+
+    # We have fit method cause Sklearn Pipeline
+    def fit(self, X, y=None):
+        return self
+
+    def transform(self, X):
+        X = X.copy()
+        for var, meta in self.binning_meta.items():
+            X[meta['var_name']] = pd.cut(X[var], bins = meta['bins'], labels = meta['bins_labels'], include_lowest = True)
+            X.drop(var, axis=1, inplace=True)
+        return X
+
+class Encoder(BaseEstimator, TransformerMixin):
+
+    """ A transformer that returns DataFrame 
+    with variable encoded.
+
+    Parameters
+    ----------
+    encoding_meta : list, default=None
+
+    """
+    
+    def __init__(self, encoding_meta=None):
+        if not isinstance(encoding_meta, dict):
+            logging.error('The config file is corrupted in binning_meta key!')
+            sys.exit(1)
+        else:
+            self.encoding_meta = encoding_meta
+
+
+    # We have fit method cause Sklearn Pipeline
+    def fit(self, X, y=None):
+        return self
+
+    def transform(self, X):
+        X = X.copy()
+        for var, meta in self.encoding_meta.items():
+            if var not in X.columns.values.tolist():
+                pass
+            X[var] = X[var].map(meta)
+        return X
+
 
     # def Encoder(self, data, encoding_meta):
     #     '''
