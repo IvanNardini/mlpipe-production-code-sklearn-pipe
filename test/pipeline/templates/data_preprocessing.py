@@ -198,40 +198,53 @@ class Scaler(BaseEstimator, TransformerMixin):
             sys.exit(1)
         else:
             self.columns_to_scale = columns_to_scale
+            self.scaler = MinMaxScaler()
 
     # We have fit method cause Sklearn Pipeline
     def fit(self, X, y=None):
+        X = X.copy()
+        self.scaler.fit(X[self.columns_to_scale])
         return self
 
     def transform(self, X):
         X = X.copy()
-        scaler = MinMaxScaler()
-        scaler.fit(X[self.columns_to_scale])
-        X[self.columns_to_scale] = scaler.transform(X[self.columns_to_scale])
+        X[self.columns_to_scale] = self.scaler.transform(X[self.columns_to_scale])
         return X
 
-    # def Scaler(self, data, columns_to_scale):
-    #     '''
-    #     Scale variables
-    #     :params:  data, columns_to_scale
-    #     :return: DataFrame
-    #     '''
-    #     data = data.copy()
-    #     scaler = MinMaxScaler()
-    #     scaler.fit(data[columns_to_scale])
-    #     data[columns_to_scale] = scaler.transform(data[columns_to_scale])
-    #     return data
 
-    # def Balancer(self, data, features_selected, target, random_state):
-    #     '''
-    #     Produce Syntetic sample with SMOTE
-    #     :params: features_selected, target, random_state
-    #     :return: X, y
-    #     '''
-    #     data = data.copy()
-    #     smote = SMOTE(random_state=random_state)
-    #     X, y = smote.fit_resample(data[features_selected], data[target])
-    #     return X, y
+# class Balancer(BaseEstimator, TransformerMixin):
+
+#     """ A transformer that returns Syntetic DataFrame
+#     balanced for Target with SMOTE
+
+#     Parameters
+#     ----------
+#     features_selected: list, default=None
+#     target: list, default=None
+#     random_state: int, default=0
+
+
+#     """
+
+#     def __init__(self, features_selected=None, target=None, random_state=0):
+#         if not isinstance(features_selected, list) and not isinstance(target, str) and not isinstance(random_state, int):
+#             logging.error('The config file is corrupted in features key!')
+#             sys.exit(1)
+#         else:
+#             self.features_selected = features_selected
+#             self.target = target
+#             self.random_state = random_state
+
+#     # We have fit method cause Sklearn Pipeline
+#     def fit(self, X, y=None):
+#         return self
+
+#     def transform(self, X):
+#         data = data.copy()
+#         smote = SMOTE(random_state=random_state)
+#         X, y = smote.fit_resample(data[features_selected], data[target])
+#         return X, y
+
         
     # def Data_Splitter(self, X, y, test_size, random_state):
     #     '''
