@@ -3,7 +3,6 @@ Compile pipeline contains the pipeline object
 '''
 import templates.data_preprocessing as Data_Prep
 # from templates.modelling import Models
-# from templates.postprocessing import PostProcessing
 from sklearn.pipeline import Pipeline
 
 #Utils
@@ -31,7 +30,9 @@ model_pipeline = Pipeline(
 
         ('Dumminizer', Data_Prep.Dumminizer(columns_to_dummies=config['nominal_predictors'], dummies_meta=config['dummies_meta'])), 
 
-        ('Scaler', Data_Prep.Scaler(columns_to_scale=config['features']))
+        ('Scaler', Data_Prep.Scaler(columns_to_scale=config['features'])),
+
+        ('Balancer', Data_Prep.Balancer(features_selected=config['features_selected'], target=config['target'])), 
 
     ]
 )

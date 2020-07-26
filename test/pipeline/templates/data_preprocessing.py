@@ -212,38 +212,38 @@ class Scaler(BaseEstimator, TransformerMixin):
         return X
 
 
-# class Balancer(BaseEstimator, TransformerMixin):
+class Balancer(BaseEstimator, TransformerMixin):
 
-#     """ A transformer that returns Syntetic DataFrame
-#     balanced for Target with SMOTE
+    """ A transformer that returns Syntetic DataFrame
+    balanced for Target with SMOTE
 
-#     Parameters
-#     ----------
-#     features_selected: list, default=None
-#     target: list, default=None
-#     random_state: int, default=0
+    Parameters
+    ----------
+    features_selected: list, default=None
+    target: list, default=None
+    random_state: int, default=0
 
 
-#     """
+    """
 
-#     def __init__(self, features_selected=None, target=None, random_state=0):
-#         if not isinstance(features_selected, list) and not isinstance(target, str) and not isinstance(random_state, int):
-#             logging.error('The config file is corrupted in features key!')
-#             sys.exit(1)
-#         else:
-#             self.features_selected = features_selected
-#             self.target = target
-#             self.random_state = random_state
+    def __init__(self, features_selected=None, target=None, random_state=0):
+        if not isinstance(features_selected, list) and not isinstance(target, str) and not isinstance(random_state, int):
+            logging.error('The config file is corrupted in features key!')
+            sys.exit(1)
+        else:
+            self.features_selected = features_selected
+            self.target = target
+            self.random_state = random_state
+            self.smote = SMOTE(random_state=self.random_state)
 
-#     # We have fit method cause Sklearn Pipeline
-#     def fit(self, X, y=None):
-#         return self
+    # We have fit method cause Sklearn Pipeline
+    def fit(self, X, y=None):
+        return self
 
-#     def transform(self, X):
-#         data = data.copy()
-#         smote = SMOTE(random_state=random_state)
-#         X, y = smote.fit_resample(data[features_selected], data[target])
-#         return X, y
+    def transform(self, X):
+        data = data.copy()
+        X, y = self.smote.fit_resample(data[features_selected], data[target])
+        return X, y
 
         
     # def Data_Splitter(self, X, y, test_size, random_state):
