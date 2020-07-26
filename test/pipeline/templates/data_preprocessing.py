@@ -34,7 +34,8 @@ class Data_Preparer(BaseEstimator, TransformerMixin):
             logging.error('The config file is corrupted in data preparer columns!')
             sys.exit(1)
         else:
-            self.variables = variables
+            self.dropped_columns = dropped_columns
+            self.renamed_columns = renamed_columns
 
     # We have fit method cause Sklearn 
     def fit(self, X, y=None):
@@ -44,7 +45,6 @@ class Data_Preparer(BaseEstimator, TransformerMixin):
         X = X.copy()
         X.drop(dropped_columns, axis=1, inplace=True)
         X.rename(columns=renamed_columns, inplace=True)
-
         return X
 
     # def Missing_Imputer(self, data, missing_predictors, replace='missing'):

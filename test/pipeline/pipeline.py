@@ -1,7 +1,7 @@
 '''
 Compile pipeline contains the pipeline object
 '''
-from templates.data_preprocessing import Preprocessing
+import templates.data_preprocessing as Data_Prep
 # from templates.modelling import Models
 # from templates.postprocessing import PostProcessing
 from sklearn.pipeline import Pipeline
@@ -19,11 +19,10 @@ config = yaml.load(stream)
 
 model_pipeline = Pipeline(
     [
-        ('Prepare_Data', Preprocessing.Data_Preparer(dropped_columns=config['dropped_columns'], 
-                                                     renamed_columns=config['renamed_columns']))
+        ('Prepare_Data', Data_Prep.Data_Preparer(dropped_columns=config['dropped_columns'], 
+                                                 renamed_columns=config['renamed_columns']))
     ]
 )
-
 
 
 
