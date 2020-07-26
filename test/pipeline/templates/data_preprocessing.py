@@ -192,7 +192,7 @@ class Scaler(BaseEstimator, TransformerMixin):
     """
 
     def __init__(self, columns_to_scale):
-        if not isinstance(columns_to_dummies, list):
+        if not isinstance(columns_to_scale, list):
             logging.error('The config file is corrupted in features key!')
             sys.exit(1)
         else:
