@@ -1,11 +1,9 @@
-#Data
-from sklearn.model_selection import train_test_split
 #Model
 from sklearn.ensemble import RandomForestClassifier
 #Sklearn pipeline
 from sklearn.base import BaseEstimator, TransformerMixin, ClassifierMixin
 
-class Classifier(BaseEstimator, ClassifierMixin):
+class Classifier(BaseEstimator, TransformerMixin, ClassifierMixin):
 
     def __init__(self):
             self.model = None
@@ -14,6 +12,9 @@ class Classifier(BaseEstimator, ClassifierMixin):
             self.max_depth = 25
             self.min_samples_split = 5
             self.n_estimators= 300
+
+    def transform(self, X):
+        self
 
     def fit(self, X, y):
         self.model = RandomForestClassifier(max_depth=self.max_depth, 

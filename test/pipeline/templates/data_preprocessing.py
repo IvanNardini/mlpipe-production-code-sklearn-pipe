@@ -8,6 +8,7 @@ import pandas as pd
 # Model Training
 from sklearn.preprocessing import MinMaxScaler
 from imblearn.over_sampling import SMOTE
+from sklearn.model_selection import train_test_split
 
 #Sklearn pipeline
 from sklearn.base import BaseEstimator, TransformerMixin
@@ -200,13 +201,12 @@ class Scaler(BaseEstimator, TransformerMixin):
 
     # We have fit method cause Sklearn Pipeline
     def fit(self, X, y=None):
-        X = X.copy()
-        self.scaler.fit(X[self.columns_to_scale])
         return self
 
     def transform(self, X):
         X = X.copy()
-        X[self.columns_to_scale] = self.scaler.transform(X[self.columns_to_scale])
+        # self.scaler.fit(X[self.columns_to_scale])
+        X[self.columns_to_scale] = self.scaler.fit_transform(X[self.columns_to_scale])
         return X
 
 class Splitter_Balanced_Data(BaseEstimator, TransformerMixin):
@@ -237,4 +237,4 @@ class Splitter_Balanced_Data(BaseEstimator, TransformerMixin):
         self.y_train = y_train
         self.y_test = y_test
 
-        return self.X_train, self.test, self.y_train, self.test
+        return self.X_train, self.X_test, self.y_train, self.y_test

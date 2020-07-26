@@ -22,8 +22,8 @@ def train():
     # Read Data
     Data = pd.read_csv(config['paths']['data_path'])
     #Train Pipeline
-    self.X_train, self.test, self.y_train, self.test = model_pipeline.transform(Data)
-    pipeline_fit = model_pipeline.fit(self.X_train, self.y_train)
+    X_train, X_test, y_train, y_test = model_pipeline.transform(Data)
+    pipeline_fit = model_pipeline.fit(X_train, y_train)
     #Save Model
     # PostProcessing.save(Pipeline, config['paths']['pipe_path'])
 
