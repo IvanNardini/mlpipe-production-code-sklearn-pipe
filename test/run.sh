@@ -1,6 +1,6 @@
 #!/bin/bash
 
-cd ./pipeline
+cd ./Pipeline
 
 for script in $*; do
     if [ $script == 'train' ]; then

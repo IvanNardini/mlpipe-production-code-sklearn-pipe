@@ -23,7 +23,7 @@ def train():
     Data = pd.read_csv(config['paths']['data_path'])
     #Train Pipeline
     Pipeline = model_pipeline.fit(Data)
-    print(Pipeline.transform(Data).head(50))
+    print(Pipeline.transform(Data)['fraud_reported'].head(10))
     #Save Model
     PostProcessing.save(Pipeline, config['paths']['pipe_path'])
 
