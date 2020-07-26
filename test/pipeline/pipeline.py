@@ -32,7 +32,7 @@ model_pipeline = Pipeline(
 
         ('Scaler', Data_Prep.Scaler(columns_to_scale=config['features'])),
 
-        ('Balancer', Data_Prep.Balancer(features_selected=config['features_selected'], target=config['target'])),
+        ('Splitter_Balanced_Data', Data_Prep.Splitter_Balanced_Data(features_selected=config['features_selected'], target=config['target'])),
 
         ('RandomForestClassifier', Modelling.Classifier()) 
 

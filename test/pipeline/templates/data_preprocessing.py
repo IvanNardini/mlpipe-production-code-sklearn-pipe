@@ -209,35 +209,32 @@ class Scaler(BaseEstimator, TransformerMixin):
         X[self.columns_to_scale] = self.scaler.transform(X[self.columns_to_scale])
         return X
 
-class Balancer(BaseEstimator, TransformerMixin):
+class Splitter_Balanced_Data(BaseEstimator, TransformerMixin):
 
-    """ A transformer that returns Syntetic DataFrame
-    balanced for Target with SMOTE
-
-    Parameters
-    ----------
-    features_selected: list, default=None
-    target: list, default=None
-    random_state: int, default=0
-
-
-    """
-
-    def __init__(self, features_selected=None, target=None):
-        if not isinstance(features_selected, list) and not isinstance(target, str):
-            logging.error('Check both the config file in features_selected and target keys and random_state number!')
+    def __init__(self, features_selected, target):
+        if (not isinstance(features_selected, list) and not isinstance(target, str)):
+            logging.error('The config file is corrupted either in features_selected or target keys!')
             sys.exit(1)
-        else:
-            self.features_selected = features_selected
-            self.target = target
-            self.random_state = 0
-            self.smote = SMOTE(random_state=self.random_state)
+        self.features_selected = features_selected
+        self.target = target
+        self.random_state_smote = 0
+        self.smote = SMOTE(random_state=self.random_state)
+        self.test_size = 0.1
+        self.random_state_sample = 0
 
     # We have fit method cause Sklearn Pipeline
     def fit(self, X, y=None):
         return self
-
+        
     def transform(self, X):
         X = X.copy()
-        X, y = self.smote.fit_resample(X[self.features_selected], X[self.target])
-        return X, y
+        self.X, self.y = self.smote.fit_resample(X[self.features_selected], X[self.target])
+        X_train, X_test, y_train, y_test = train_test_split(self.X, self.y,
+                                                            test_size=self.test_size,
+                                                            random_state=self.random_state_sample)
+        self.X_train = X_train
+        self.X_test = X_test
+        self.y_train = y_train
+        self.y_test = y_test
+
+        return self.X_train, self.test, self.y_train, self.test
