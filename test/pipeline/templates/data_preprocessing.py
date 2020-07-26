@@ -8,9 +8,6 @@ import pandas as pd
 # Model Training
 from sklearn.preprocessing import MinMaxScaler
 from imblearn.over_sampling import SMOTE
-from sklearn.model_selection import train_test_split
-from sklearn.ensemble import RandomForestClassifier
-from sklearn.metrics import classification_report
 
 #Sklearn pipeline
 from sklearn.base import BaseEstimator, TransformerMixin
