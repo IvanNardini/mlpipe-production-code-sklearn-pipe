@@ -20,7 +20,10 @@ config = yaml.load(stream)
 model_pipeline = Pipeline(
     [
         ('Prepare_Data', Data_Prep.Data_Preparer(dropped_columns=config['dropped_columns'], 
-                                                 renamed_columns=config['renamed_columns']))
+                                                 renamed_columns=config['renamed_columns'])), 
+        
+        ('Impute_Missing', Data_Prep.Missing_Imputer(missing_predictors=config['missing_predictors'], 
+                                                     replace='missing'))
     ]
 )
 

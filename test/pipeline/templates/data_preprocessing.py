@@ -23,41 +23,65 @@ import warnings
 warnings.simplefilter('ignore', yaml.error.UnsafeLoaderWarning)
 
 class Data_Preparer(BaseEstimator, TransformerMixin):
-    '''
-    Drop and Rename columns
-    :params: data, columns_to_drop
-    :return: DataFrame
-    '''
+
+    """ A transformer that returns the transformer dataframe.
+
+    Parameters
+    ----------
+    dropped_columns : list, default=None
+    renamed_columns : dict, default=None
+
+    """
     
     def __init__(self, dropped_columns=None, renamed_columns=None):
         if not isinstance(dropped_columns, list) and not isinstance(renamed_columns, dict):
-            logging.error('The config file is corrupted in data preparer columns!')
+            logging.error('The config file is corrupted either dropped_columns or renamed_columns keys!')
             sys.exit(1)
         else:
             self.dropped_columns = dropped_columns
             self.renamed_columns = renamed_columns
 
-    # We have fit method cause Sklearn 
+    # We have fit method cause Sklearn Pipeline
     def fit(self, X, y=None):
         return self
 
-    def transform(self, X, dropped_columns, renamed_columns):
+    def transform(self, X):
+
         X = X.copy()
-        X.drop(dropped_columns, axis=1, inplace=True)
-        X.rename(columns=renamed_columns, inplace=True)
+        X.drop(self.dropped_columns, axis=1, inplace=True)
+        X.rename(columns=self.renamed_columns, inplace=True)
         return X
 
-    # def Missing_Imputer(self, data, missing_predictors, replace='missing'):
-    #     '''
-    #     Imputes '?' character with 'missing' label
-    #     :params: data, missing_predictors, replace
-    #     :return: DataFrame
-    #     '''
-    #     data = data.copy()
-    #     for var in missing_predictors:
-    #         data[var] = data[var].replace('?', replace)
-    #     return data
+class Missing_Imputer(BaseEstimator, TransformerMixin):
 
+    """ A transformer that returns impute missings.
+
+    Parameters
+    ----------
+    missing_predictors : list, default=None
+    replace : str, default=missing
+
+    """
+
+    def __init__(self, missing_predictors=None, replace='missing'):
+        if not isinstance(missing_predictors, list):
+            logging.error('The config file is corrupted in missing_predictors key!')
+            sys.exit(1)
+        else:
+            self.missing_predictors = missing_predictors
+            self.replace = replace
+
+    # We have fit method cause Sklearn Pipeline
+    def fit(self, X, y=None):
+        return self
+
+    def transform(self, X):
+        X = X.copy()
+        for var in self.missing_predictors:
+            X[var] = X[var].replace('?', self.replace)
+        return X
+
+    #     
     # def Binner(self, data, binning_meta):
     #     '''
     #     Create bins based on variable distributions

@@ -23,6 +23,7 @@ def train():
     Data = pd.read_csv(config['paths']['data_path'])
     #Train Pipeline
     Pipeline = model_pipeline.fit(Data)
+    print(Pipeline.transform(Data).head(10))
     #Save Model
     PostProcessing.save(Pipeline, config['paths']['pipe_path'])
 
@@ -34,4 +35,5 @@ if __name__ == '__main__':
     train()
     end = time.time()
     duration = end - start
-    logging.info('Training process successfully completed in {} seconds!'.format(round(duration, 5)))
+    logging.info('Training process successfully completed!')
+    logging.info('Time for training: {} seconds!'.format(round(duration, 5)))
