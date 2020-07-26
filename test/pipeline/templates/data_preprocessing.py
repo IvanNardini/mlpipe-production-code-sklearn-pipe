@@ -9,6 +9,7 @@ import pandas as pd
 from sklearn.preprocessing import MinMaxScaler
 from imblearn.over_sampling import SMOTE
 from sklearn.model_selection import train_test_split
+from sklearn.ensemble import RandomForestClassifier
 from sklearn.metrics import classification_report
 
 #Sklearn pipeline
@@ -211,7 +212,6 @@ class Scaler(BaseEstimator, TransformerMixin):
         X[self.columns_to_scale] = self.scaler.transform(X[self.columns_to_scale])
         return X
 
-
 class Balancer(BaseEstimator, TransformerMixin):
 
     """ A transformer that returns Syntetic DataFrame
@@ -226,14 +226,14 @@ class Balancer(BaseEstimator, TransformerMixin):
 
     """
 
-    def __init__(self, features_selected=None, target=None, random_state=0):
-        if not isinstance(features_selected, list) and not isinstance(target, str) and not isinstance(random_state, int):
-            logging.error('The config file is corrupted in features key!')
+    def __init__(self, features_selected=None, target=None):
+        if not isinstance(features_selected, list) and not isinstance(target, str):
+            logging.error('Check both the config file in features_selected and target keys and random_state number!')
             sys.exit(1)
         else:
             self.features_selected = features_selected
             self.target = target
-            self.random_state = random_state
+            self.random_state = 0
             self.smote = SMOTE(random_state=self.random_state)
 
     # We have fit method cause Sklearn Pipeline
@@ -244,18 +244,3 @@ class Balancer(BaseEstimator, TransformerMixin):
         X = X.copy()
         X, y = self.smote.fit_resample(X[self.features_selected], X[self.target])
         return X, y
-
-        
-    # def Data_Splitter(self, X, y, test_size, random_state):
-    #     '''
-    #     Split data in train and test samples
-    #     :params: X, y
-    #     :return: X_train, X_test, y_train, y_test
-    #     '''
-        
-    #     X_train, X_test, y_train, y_test = train_test_split(X,
-    #                                                         y,
-    #                                                         test_size=test_size,
-    #                                                         random_state=random_state)
-    #     return X_train, X_test, y_train, y_test
-    

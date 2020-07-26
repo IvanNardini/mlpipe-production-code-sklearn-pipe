@@ -19,11 +19,10 @@ stream = open('config.yaml', 'r')
 config = yaml.load(stream)
 
 def train():
-    # read data
+    # Read Data
     Data = pd.read_csv(config['paths']['data_path'])
     #Train Pipeline
     model_pipeline.fit(Data)
-    print(model_pipeline.transform(Data)[0], model_pipeline.transform(Data)[1])
     #Save Model
     # PostProcessing.save(Pipeline, config['paths']['pipe_path'])
 

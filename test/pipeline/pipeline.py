@@ -2,7 +2,7 @@
 Compile pipeline contains the pipeline object
 '''
 import templates.data_preprocessing as Data_Prep
-# from templates.modelling import Models
+import templates.modelling as Modelling
 from sklearn.pipeline import Pipeline
 
 #Utils
@@ -32,7 +32,9 @@ model_pipeline = Pipeline(
 
         ('Scaler', Data_Prep.Scaler(columns_to_scale=config['features'])),
 
-        ('Balancer', Data_Prep.Balancer(features_selected=config['features_selected'], target=config['target'])), 
+        ('Balancer', Data_Prep.Balancer(features_selected=config['features_selected'], target=config['target'])),
+
+        ('RandomForestClassifier', Modelling.Classifier()) 
 
     ]
 )
