@@ -17,6 +17,7 @@ from sklearn.base import BaseEstimator, TransformerMixin
 #Utils
 import sys
 import logging
+logging.basicConfig(format='%(asctime)s %(levelname)s %(message)s', datefmt='%m/%d/%Y %I:%M:%S %p', level=logging.INFO)
 import joblib
 import ruamel.yaml as yaml
 import warnings
@@ -208,8 +209,6 @@ class Scaler(BaseEstimator, TransformerMixin):
         scaler.fit(X[self.columns_to_scale])
         X[self.columns_to_scale] = scaler.transform(X[self.columns_to_scale])
         return X
-
-
 
     # def Scaler(self, data, columns_to_scale):
     #     '''
