@@ -124,7 +124,7 @@ class Encoder(BaseEstimator, TransformerMixin):
     
     def __init__(self, encoding_meta=None):
         if not isinstance(encoding_meta, dict):
-            logging.error('The config file is corrupted in binning_meta key!')
+            logging.error('The config file is corrupted in encoding_meta key!')
             sys.exit(1)
         else:
             self.encoding_meta = encoding_meta
@@ -142,38 +142,44 @@ class Encoder(BaseEstimator, TransformerMixin):
             X[var] = X[var].map(meta)
         return X
 
+class Dumminizer(BaseEstimator, TransformerMixin):
 
-    # def Encoder(self, data, encoding_meta):
-    #     '''
-    #     Encode all variables for training
-    #     :params: data, var, mapping
-    #     :return: DataFrame
-    #     '''
-    #     data = data.copy()
-    #     for var, meta in encoding_meta.items():
-    #         if var not in data.columns.values.tolist():
-    #             pass
-    #         data[var] = data[var].map(meta)
-    #     return data
+    """ A transformer that returns DataFrame 
+    with dummies.
 
-    # def Dumminizer(self, data, columns_to_dummies, dummies_meta):
-    #     '''
-    #     Generate dummies for nominal variables
-    #     :params: data, columns_to_dummies, dummies_meta
-    #     :return: DataFrame
-    #     '''
-    #     data = data.copy()
-    #     for var in columns_to_dummies:
-    #         cat_names = sorted(dummies_meta[var])
-    #         obs_cat_names = sorted(list(set(data[var].unique())))
-    #         dummies = pd.get_dummies(data[var], prefix=var)
-    #         data = pd.concat([data, dummies], axis=1)
-    #         if obs_cat_names != cat_names: #exception: when label misses 
-    #             cat_miss_labels = ["_".join([var, cat]) for cat in cat_names if cat not in obs_cat_names] #syntetic dummy
-    #             for cat in cat_miss_labels:
-    #                 data[cat] = 0 
-    #         data = data.drop(var, 1)
-    #     return data
+    Parameters
+    ----------
+    columns_to_dummies: list, default=None
+    dummies_meta : dict, default=None
+
+    """
+
+    def __init__(self, columns_to_dummies, dummies_meta):
+        if not isinstance(columns_to_dummies, list) and not isinstance(encoding_meta, dict):
+            logging.error('The config file is corrupted in either nominal_predictors or encoding_meta keys!')
+            sys.exit(1)
+        else:
+            self.columns_to_dummies = columns_to_dummies
+            self.dummies_meta = dummies_meta
+
+    # We have fit method cause Sklearn Pipeline
+    def fit(self, X, y=None):
+        return self
+
+    def transform(self, X):
+        X = X.copy()
+        for var in self.columns_to_dummies:
+            cat_names = sorted(self.dummies_meta[var])
+            obs_cat_names = sorted(list(set(X[var].unique())))
+            dummies = pd.get_dummies(X[var], prefix=var)
+            X = pd.concat([X, dummies], axis=1)
+            if obs_cat_names != cat_names: #exception: when label misses 
+                cat_miss_labels = ["_".join([var, cat]) for cat in cat_names if cat not in obs_cat_names] #syntetic dummy
+                for cat in cat_miss_labels:
+                    X[cat] = 0 
+            X = X.drop(var, 1)
+        return X
+
 
     # def Scaler(self, data, columns_to_scale):
     #     '''
