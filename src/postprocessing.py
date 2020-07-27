@@ -1,8 +1,9 @@
 from sklearn.metrics import classification_report
+import joblib
 
 class PostProcessing:
-
-    def evaluate_classification(self, model, X_train, y_train, X_test, y_test):
+    @staticmethod
+    def evaluate_classification(model, X_train, y_train, X_test, y_test):
         '''
         Evaluate classification
         params: model, X_train, y_train, X_test, y_test
@@ -27,4 +28,25 @@ class PostProcessing:
         print()
         print('Classification report - Test')
         print(classification_test)
-        return None
+        return 0
+
+    @staticmethod
+    def save(model, path):
+        '''
+        Store model
+        params: model, path
+        return 0
+        '''
+        joblib.dump(model, path)
+        return 0
+
+    @staticmethod
+    def load(path):
+        '''
+        Load model
+        params: path
+        return obj
+        '''
+        obj = joblib.load(path)
+        return obj
+        
