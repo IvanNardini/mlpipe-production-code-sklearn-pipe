@@ -28,14 +28,25 @@ class PostProcessing:
         print()
         print('Classification report - Test')
         print(classification_test)
-        return None
+        return 0
 
     @staticmethod
     def save(model, path):
         '''
         Store model
         params: model, path
-        returns none
+        return 0
         '''
         joblib.dump(model, path)
-        return None
+        return 0
+
+    @staticmethod
+    def load(path):
+        '''
+        Load model
+        params: path
+        return obj
+        '''
+        obj = joblib.load(path)
+        return obj
+        

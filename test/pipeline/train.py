@@ -2,9 +2,16 @@
 import numpy as np
 import pandas as pd
 
+#Preprocessing
+from imblearn.over_sampling import SMOTE
+from sklearn.model_selection import train_test_split
+
 #Pipeline
-from templates.postprocessing import PostProcessing
-from pipeline import model_pipeline
+from pipeline import pipeline
+
+#Model
+from sklearn.ensemble import RandomForestClassifier
+from postprocessing import PostProcessing
 
 #Utils
 import logging
@@ -20,12 +27,25 @@ config = yaml.load(stream)
 
 def train():
     # Read Data
-    Data = pd.read_csv(config['paths']['data_path'])
+    data = pd.read_csv(config['paths']['data_path'])
     #Train Pipeline
-    X_train, X_test, y_train, y_test = model_pipeline.transform(Data)
-    pipeline_fit = model_pipeline.fit(X_train, y_train)
+    Pipeline_fit = pipeline.fit(data)
+    X = Pipeline_fit.transform(data)
+    # SMOTE
+    smote =  SMOTE(random_state=0)
+    X, y = smote.fit_resample(X[config['features_selected']], X[config['target']])
+    # Split
+    X_train, X_test, y_train, y_test = train_test_split(X, y,
+                                                        test_size=0.1,
+                                                        random_state=0)
+    model = RandomForestClassifier(max_depth=25, 
+                                    min_samples_split=5, 
+                                    n_estimators=300,
+                                    random_state=9)
+    model.fit(X_train, y_train)
+
     #Save Model
-    # PostProcessing.save(Pipeline, config['paths']['pipe_path'])
+    PostProcessing.save(model, config['paths']['pipe_path'])
 
 if __name__ == '__main__':
 

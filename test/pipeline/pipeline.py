@@ -1,8 +1,7 @@
 '''
 Compile pipeline contains the pipeline object
 '''
-import templates.data_preprocessing as Data_Prep
-import templates.modelling as Modelling
+import data_preprocessing as Data_Prep
 from sklearn.pipeline import Pipeline
 
 #Utils
@@ -16,7 +15,7 @@ warnings.simplefilter('ignore', yaml.error.UnsafeLoaderWarning)
 stream = open('config.yaml', 'r')
 config = yaml.load(stream)
 
-model_pipeline = Pipeline(
+pipeline = Pipeline(
     [
         ('Data_Preparer', Data_Prep.Data_Preparer(dropped_columns=config['dropped_columns'], 
                                                   renamed_columns=config['renamed_columns'])),
@@ -32,9 +31,7 @@ model_pipeline = Pipeline(
 
         ('Scaler', Data_Prep.Scaler(columns_to_scale=config['features'])),
 
-        ('Splitter_Balanced_Data', Data_Prep.Splitter_Balanced_Data(features_selected=config['features_selected'], target=config['target'])),
-
-        ('RandomForestClassifier', Modelling.Classifier()) 
+        # ('Splitter_Balanced_Data', Data_Prep.Splitter_Balanced_Data(features_selected=config['features_selected'], target=config['target']))
 
     ]
 )
