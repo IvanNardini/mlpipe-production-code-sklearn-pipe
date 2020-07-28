@@ -31,16 +31,18 @@ if __name__ == '__main__':
 
     # Read Data
     data = pd.read_csv(config['paths']['data_path'])
-    target_labels = set(data[config['target']])
-    target_labels_dic = {label: index for index, label in enumerate(target_labels, 0)}
-    data[config['target']] = data[config['target']].map(target_labels_dic)
-
-    #Split data
+    
+    # Encode target
     target = config['target']
     variables = [col for col in data.columns if col != target]
+    target_labels = set(data[target])
+    target_labels_dic = {label: index for index, label in enumerate(target_labels, 0)}
+    data[target] = data[target].map(target_labels_dic)
+    
+    #Split data
     X_train, X_test, y_train, y_test = train_test_split(data[variables], data[target],
                                                         test_size=0.1,
-                                                        random_state=0)
+                                                        random_state=0) 
     logging.info('Scoring process started!')
     start = time.time()
     pipeline, predictions = score(config['paths']['pipe_path'], X_test)
