@@ -30,6 +30,7 @@ def train():
     variables = [col for col in data.columns if col != target]
     target_labels = set(data[target])
     target_labels_dic = {label: index for index, label in enumerate(target_labels, 0)}
+    print(target_labels_dic)
     data[target] = data[target].map(target_labels_dic)
     
     #Split data
