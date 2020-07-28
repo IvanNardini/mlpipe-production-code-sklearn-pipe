@@ -48,7 +48,7 @@ class Data_Preparer(BaseEstimator, TransformerMixin):
 
         X = X.copy()
         X.drop(self.dropped_columns, axis=1, inplace=True)
-        # X.rename(columns=self.renamed_columns, inplace=True)
+        X.rename(columns=self.renamed_columns, inplace=True)
         return X
 
 class Missing_Imputer(BaseEstimator, TransformerMixin):
