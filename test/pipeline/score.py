@@ -43,7 +43,7 @@ if __name__ == '__main__':
                                                         random_state=0)
     logging.info('Scoring process started!')
     start = time.time()
-    pipeline, predictions = score(config['paths']['pipe_path'], X_test)
+    pipeline, predictions = score(config['paths']['pipe_path'], X_train)
     end = time.time()
     duration = end - start
     logging.info('Scoring process successfully completed!')
