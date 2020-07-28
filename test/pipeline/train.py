@@ -28,7 +28,6 @@ def train():
     # Encode target
     target_labels = set(data[config['target']])
     target_labels_dic = {label: index for index, label in enumerate(target_labels, 0)}
-    print(target_labels_dic)
     data[config['target']] = data[config['target']].map(target_labels_dic)
     
     #Split data
