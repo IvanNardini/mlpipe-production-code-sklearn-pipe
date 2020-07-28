@@ -34,7 +34,7 @@ pipeline = Pipeline(
 
         ('SMOTE', SMOTE(random_state=0)), 
 
-        ('RandomForestClassifier', RandomForestClassifier(max_depth=25, min_samples_split=5, n_estimators=300, random_state=9))
+        ('RandomForestClassifier', RandomForestClassifier(max_depth=25, min_samples_split=5, n_estimators=300, random_state=8))
 
     ]
 )
