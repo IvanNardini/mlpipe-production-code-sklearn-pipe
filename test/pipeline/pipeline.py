@@ -29,7 +29,7 @@ pipeline = Pipeline(
 
         ('Dumminizer', Data_Prep.Dumminizer(columns_to_dummies=config['nominal_predictors'], dummies_meta=config['dummies_meta'])), 
 
-        ('Scaler', Data_Prep.Scaler(columns_to_scale=config['features'])),
+        ('Scaler', Data_Prep.Scaler(columns_to_scale=config['features'], features_selected=config['features_selected'])),
 
         ('SMOTE', SMOTE(random_state=0)), 
 
