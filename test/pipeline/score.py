@@ -35,7 +35,7 @@ if __name__ == '__main__':
     # Encode target
     target = config['target']
     variables = [col for col in data.columns if col != target]
-    target_labels = set(data[target])
+    target_labels = sorted(set(data[target]))
     target_labels_dic = {label: index for index, label in enumerate(target_labels, 0)}
     data[target] = data[target].map(target_labels_dic)
     
