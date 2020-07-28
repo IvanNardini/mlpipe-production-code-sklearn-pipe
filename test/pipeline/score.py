@@ -62,4 +62,4 @@ if __name__ == '__main__':
     print("*"*20)
     print("Model Assessment".center(20, '*'))
     print("*"*20)
-    PostProcessing.evaluate_classification(X_test, y_test, pipeline, predictions)
+    PostProcessing.evaluate_classification(X_train, y_train, pipeline, predictions)
