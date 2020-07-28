@@ -195,7 +195,6 @@ class Scaler(BaseEstimator, TransformerMixin):
         else:
             self.columns_to_scale = columns_to_scale
             self.scaler = MinMaxScaler()
-            self.features_selected = features_selected
 
     # We have fit method cause Sklearn Pipeline
     def fit(self, X, y=None):
