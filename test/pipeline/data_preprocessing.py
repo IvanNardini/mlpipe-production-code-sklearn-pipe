@@ -202,7 +202,7 @@ class Scaler(BaseEstimator, TransformerMixin):
 
     def transform(self, X):
         X = X.copy()
-        scaler_fit = self.scaler.fit(data[X[self.columns_to_scale]]) 
+        scaler_fit = self.scaler.fit(X[self.columns_to_scale]) 
         X[self.columns_to_scale] = scaler_fit.transform(X[self.columns_to_scale])
         return X
 
