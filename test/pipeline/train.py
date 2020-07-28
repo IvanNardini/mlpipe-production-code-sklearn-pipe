@@ -41,10 +41,10 @@ def train():
                                                         test_size=0.1,
                                                         random_state=0)    
     #Train Pipeline
-    pipeline.fit(X_train, y_train)
+    Pipeline_Fit = pipeline.fit(X_train, y_train)
 
     #Save Model
-    # PostProcessing.save(model, config['paths']['pipe_path'])
+    PostProcessing.save(Pipeline_Fit, config['paths']['pipe_path'])
 
 if __name__ == '__main__':
 
