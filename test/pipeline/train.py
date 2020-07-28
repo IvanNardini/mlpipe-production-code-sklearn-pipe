@@ -35,7 +35,7 @@ def train():
     data[config['target']] = data[config['target']].map(target_labels_dic)
 
     target = 'fraud_reported'
-    variables = [col for col in data.columns if col not in drop and col != target]
+    variables = [col for col in data.columns if col != target]
 
     #Split data
     X_train, X_test, y_train, y_test = train_test_split(data[target], data[variables],
