@@ -31,8 +31,8 @@ class Data_Preparer(BaseEstimator, TransformerMixin):
     renamed_columns : dict, default=None
 
     """
-    # renamed_columns=None
-    def __init__(self, dropped_columns=None):
+    
+    def __init__(self, dropped_columns=None, renamed_columns=None):
         if not isinstance(dropped_columns, list) and not isinstance(renamed_columns, dict):
             logging.error('The config file is corrupted either dropped_columns or renamed_columns keys!')
             sys.exit(1)
@@ -45,10 +45,9 @@ class Data_Preparer(BaseEstimator, TransformerMixin):
         return self
 
     def transform(self, X):
-
         X = X.copy()
         X.drop(self.dropped_columns, axis=1, inplace=True)
-        # X.rename(columns=self.renamed_columns, inplace=True)
+        X.rename(columns=self.renamed_columns, inplace=True)
         return X
 
 class Missing_Imputer(BaseEstimator, TransformerMixin):
