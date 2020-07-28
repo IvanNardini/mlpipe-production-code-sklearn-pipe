@@ -3,6 +3,7 @@ Compile pipeline contains the pipeline object
 '''
 import data_preprocessing as Data_Prep
 from imblearn.pipeline import Pipeline
+from imblearn.over_sampling import SMOTE
 from sklearn.ensemble import RandomForestClassifier
 
 #Utils
