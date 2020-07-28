@@ -2,7 +2,8 @@
 Compile pipeline contains the pipeline object
 '''
 import data_preprocessing as Data_Prep
-from sklearn.pipeline import Pipeline
+from imblearn.pipeline import Pipeline
+from sklearn.ensemble import RandomForestClassifier
 
 #Utils
 import logging
@@ -30,6 +31,10 @@ pipeline = Pipeline(
         ('Dumminizer', Data_Prep.Dumminizer(columns_to_dummies=config['nominal_predictors'], dummies_meta=config['dummies_meta'])), 
 
         ('Scaler', Data_Prep.Scaler(columns_to_scale=config['features'])),
+
+        ('SMOTE', SMOTE(random_state=0)), 
+
+        ('Model', RandomForestClassifier(max_depth=25, min_samples_split=5, n_estimators=300, random_state=9))
 
         # ('Splitter_Balanced_Data', Data_Prep.Splitter_Balanced_Data(features_selected=config['features_selected'], target=config['target']))
 
