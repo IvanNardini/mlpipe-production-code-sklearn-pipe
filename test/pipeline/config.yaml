@@ -111,7 +111,6 @@ binned_variables:
 -   policy_annual_premium
 -   months_as_customer
 encode_variables:
-# -   fraud_reported
 -   insured_hobbies
 -   incident_severity
 -   policy_annual_premium_groups
@@ -320,9 +319,6 @@ dummies_meta:
     -   351-400
     -   401-450
 encoding_meta:
-    # fraud_reported:
-    #     N: 0
-    #     Y: 1
     insured_hobbies:
         sleeping: others
         reading: others

@@ -33,25 +33,15 @@ def train():
     target_labels = set(data[config['target']])
     target_labels_dic = {label: index for index, label in enumerate(target_labels, 0)}
     data[config['target']] = data[config['target']].map(target_labels_dic)
-
+    
+    #Split data
     target = 'fraud_reported'
     variables = [col for col in data.columns if col != target]
-
-    #Split data
     X_train, X_test, y_train, y_test = train_test_split(data[variables], data[target],
                                                         test_size=0.1,
                                                         random_state=0)    
     #Train Pipeline
-    Pipeline_fit = pipeline.fit(X_train, y_train)
-    # X = Pipeline_fit.transform(data)
-    # # SMOTE
-    # smote =  SMOTE(random_state=0)
-    # X, y = smote.fit_resample(X[config['features_selected']], X[config['target']])
-    # model = RandomForestClassifier(max_depth=25, 
-    #                                 min_samples_split=5, 
-    #                                 n_estimators=300,
-    #                                 random_state=9)
-    # model.fit(X_train, y_train)
+    pipeline.fit(X_train, y_train)
 
     #Save Model
     # PostProcessing.save(model, config['paths']['pipe_path'])
