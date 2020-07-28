@@ -33,11 +33,11 @@ def train():
     data[target] = data[target].map(target_labels_dic)
     
     #Split data
-    # X_train, X_test, y_train, y_test = train_test_split(data[variables], data[target],
-    #                                                     test_size=0.20,
-    #                                                     random_state=1)    
+    X_train, X_test, y_train, y_test = train_test_split(data[variables], data[target],
+                                                        test_size=0.20,
+                                                        random_state=1)    
     #Train Pipeline
-    Pipeline_Fit = pipeline.fit(data[variables], data[target])
+    Pipeline_Fit = pipeline.fit(X_train, y_train)
 
     #Save Model
     PostProcessing.save(Pipeline_Fit, config['paths']['pipe_path'])

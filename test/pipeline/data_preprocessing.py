@@ -188,7 +188,7 @@ class Scaler(BaseEstimator, TransformerMixin):
 
     """
 
-    def __init__(self, columns_to_scale, features_selected):
+    def __init__(self, columns_to_scale):
         if not isinstance(columns_to_scale, list):
             logging.error('The config file is corrupted in features key!')
             sys.exit(1)
@@ -203,5 +203,33 @@ class Scaler(BaseEstimator, TransformerMixin):
 
     def transform(self, X):
         X = X.copy()
-        X[self.columns_to_scale] = self.scaler.fit_transform(X[self.columns_to_scale])
-        return X[self.features_selected]
+        scaler_fit = self.scaler.fit(data[X[self.columns_to_scale]]) 
+        X[self.columns_to_scale] = scaler_fit.transform(X[self.columns_to_scale])
+        return X
+
+class Feature_selector(BaseEstimator, TransformerMixin):
+
+    """ A transformer that returns DataFrame 
+    with selected features
+
+    Parameters
+    ----------
+    features_selected: list, default=None
+
+    """
+
+    def __init__(self, features_selected):
+        if not isinstance(features_selected, list):
+            logging.error('The config file is corrupted in features_selected key!')
+            sys.exit(1)
+        else:
+            self.features_selected = features_selected
+
+    # We have fit method cause Sklearn Pipeline
+    def fit(self, X, y=None):
+        return self
+
+    def transform(self, X):
+        X = X.copy()
+        X = X[self.features_selected]
+        return X
