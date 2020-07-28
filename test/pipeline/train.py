@@ -1,22 +1,18 @@
 # Read data
-import numpy as np
 import pandas as pd
 
 #Preprocessing
-from imblearn.over_sampling import SMOTE
 from sklearn.model_selection import train_test_split
 
 #Pipeline
 from pipeline import pipeline
 
 #Model
-from sklearn.ensemble import RandomForestClassifier
 from postprocessing import PostProcessing
 
 #Utils
 import logging
 import time
-import joblib
 import ruamel.yaml as yaml
 import warnings
 warnings.simplefilter('ignore', yaml.error.UnsafeLoaderWarning)
@@ -35,7 +31,7 @@ def train():
     data[config['target']] = data[config['target']].map(target_labels_dic)
     
     #Split data
-    target = 'fraud_reported'
+    target = config['target']
     variables = [col for col in data.columns if col != target]
     X_train, X_test, y_train, y_test = train_test_split(data[variables], data[target],
                                                         test_size=0.1,
