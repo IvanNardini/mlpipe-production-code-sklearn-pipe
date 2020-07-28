@@ -32,9 +32,9 @@ pipeline = Pipeline(
 
         ('Scaler', Data_Prep.Scaler(columns_to_scale=config['features_selected'])),
 
-        ('SMOTE', SMOTE(random_state=9)), 
+        ('SMOTE', SMOTE(random_state=0)), 
 
-        ('RandomForestClassifier', RandomForestClassifier(max_depth=25, min_samples_split=5, n_estimators=300, random_state=8))
+        ('RandomForestClassifier', RandomForestClassifier(max_depth=25, min_samples_split=5, n_estimators=300))
 
     ]
 )

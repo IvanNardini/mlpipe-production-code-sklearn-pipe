@@ -39,8 +39,8 @@ if __name__ == '__main__':
     target = config['target']
     variables = [col for col in data.columns if col != target]
     X_train, X_test, y_train, y_test = train_test_split(data[variables], data[target],
-                                                        test_size=0.2,
-                                                        random_state=1)
+                                                        test_size=0.1,
+                                                        random_state=0)
     logging.info('Scoring process started!')
     start = time.time()
     pipeline, predictions = score(config['paths']['pipe_path'], X_test)
