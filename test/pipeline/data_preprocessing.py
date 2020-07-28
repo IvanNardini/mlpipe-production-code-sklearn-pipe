@@ -45,8 +45,6 @@ class Data_Preparer(BaseEstimator, TransformerMixin):
         return self
 
     def transform(self, X):
-        if not isinstance(X, pd.DataFrame):
-            print('test')
         X = X.copy()
         X.drop(self.dropped_columns, axis=1, inplace=True)
         X.rename(columns=self.renamed_columns, inplace=True)

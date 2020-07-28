@@ -38,9 +38,9 @@ def train():
     variables = [col for col in data.columns if col != target]
 
     #Split data
-    X_train, X_test, y_train, y_test = train_test_split(data[target], data[variables],
-                                                            test_size=0.1,
-                                                            random_state=0)    
+    X_train, X_test, y_train, y_test = train_test_split(data[variables], data[target],
+                                                        test_size=0.1,
+                                                        random_state=0)    
     #Train Pipeline
     Pipeline_fit = pipeline.fit(X_train, y_train)
     # X = Pipeline_fit.transform(data)
