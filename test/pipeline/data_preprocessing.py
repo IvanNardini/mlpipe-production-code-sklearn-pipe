@@ -188,13 +188,14 @@ class Scaler(BaseEstimator, TransformerMixin):
 
     """
 
-    def __init__(self, columns_to_scale):
+    def __init__(self, columns_to_scale, features_selected):
         if not isinstance(columns_to_scale, list):
             logging.error('The config file is corrupted in features key!')
             sys.exit(1)
         else:
             self.columns_to_scale = columns_to_scale
             self.scaler = MinMaxScaler()
+            self.features_selected
 
     # We have fit method cause Sklearn Pipeline
     def fit(self, X, y=None):
@@ -203,4 +204,4 @@ class Scaler(BaseEstimator, TransformerMixin):
     def transform(self, X):
         X = X.copy()
         X[self.columns_to_scale] = self.scaler.fit_transform(X[self.columns_to_scale])
-        return X
+        return X[self.features_selected]
