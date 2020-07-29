@@ -45,7 +45,7 @@ if __name__ == '__main__':
                                                         random_state=1) 
     logging.info('Scoring process started!')
     start = time.time()
-    pipeline, predictions = score(config['paths']['pipe_path'], X_train)
+    pipeline, predictions = score(config['paths']['pipe_path'], X_test)
     end = time.time()
     duration = end - start
     logging.info('Scoring process successfully completed!')
@@ -64,4 +64,4 @@ if __name__ == '__main__':
     print("*"*20)
     print("Model Assessment".center(20, '*'))
     print("*"*20)
-    PostProcessing.evaluate_classification(X_train, y_train, pipeline, predictions)
+    PostProcessing.evaluate_classification(X_test, y_test, pipeline, predictions)
