@@ -6,8 +6,8 @@ class PostProcessing:
     def evaluate_classification(X, y, pipeline, predictions):
         '''
         Evaluate classification
-        params: model, X_train, y_train, X_test, y_test
-        returns: None
+        params: X, y, pipeline, predictions
+        returns: 0
         '''
 
         #Evaluate Sample
