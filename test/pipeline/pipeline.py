@@ -2,6 +2,7 @@
 Compile pipeline contains the pipeline object
 '''
 import data_preprocessing as Data_Prep
+import feature_engineering as Feat_Eng
 from imblearn.pipeline import Pipeline
 from imblearn.over_sampling import SMOTE
 from sklearn.ensemble import RandomForestClassifier
@@ -17,21 +18,31 @@ warnings.simplefilter('ignore', yaml.error.UnsafeLoaderWarning)
 stream = open('config.yaml', 'r')
 config = yaml.load(stream)
 
+DATA_INGESTION = config['data_ingestion']
+PREPROCESSING = config['preprocessing']
+FEATURES_ENGINEERING = config['features_engineering']
+MODEL_TRAINING = config['model_training']
+
 pipeline = Pipeline(
     [
-        ('Data_Preparer', Data_Prep.Data_Preparer(dropped_columns=config['dropped_columns'], renamed_columns=config['renamed_columns'])),
+        ('Dropper', Data_Prep.Dropper(dropped_columns=PREPROCESSING['dropped_columns'])),
 
-        ('Missing_Imputer', Data_Prep.Missing_Imputer(missing_predictors=config['missing_predictors'], replace='missing')), 
+        ('Renamer', Data_Prep.Renamer(renamed_columns=PREPROCESSING['renamed_columns'])),
 
-        ('Binner', Data_Prep.Binner(binning_meta=config['binning_meta'])), 
+        ('Anomalizer', Data_Prep.Anomalizer(anomaly_var='umbrella_limit')),
 
-        ('Encoder', Data_Prep.Encoder(encoding_meta=config['encoding_meta'])),
+        ('Missing_Imputer', Data_Prep.Missing_Imputer(missing_predictors=PREPROCESSING['missing_predictors'], 
+                                                    replace='missing')), 
 
-        ('Dumminizer', Data_Prep.Dumminizer(columns_to_dummies=config['nominal_predictors'], dummies_meta=config['dummies_meta'])), 
+        ('Binner', Feat_Eng.Binner(binning_meta=FEATURES_ENGINEERING['binning_meta'])), 
 
-        ('Scaler', Data_Prep.Scaler(columns_to_scale=config['features'])),
+        ('Encoder', Feat_Eng.Encoder(encoding_meta=FEATURES_ENGINEERING['encoding_meta'])),
 
-        ('Feature_selector', Data_Prep.Feature_selector(features_selected=config['features_selected'])), 
+        ('Dumminizer', Feat_Eng.Dumminizer(columns_to_dummies=FEATURES_ENGINEERING['nominal_predictors'])), 
+
+        ('Scaler', Feat_Eng.Scaler(features=FEATURES_ENGINEERING['features'])),
+
+        ('Feature_selector', Feat_Eng.Feature_selector(features_selected=FEATURES_ENGINEERING['features_selected'])), 
 
         ('SMOTE', SMOTE(random_state=9)), 
 
