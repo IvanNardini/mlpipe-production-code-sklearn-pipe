@@ -23,6 +23,6 @@ COPY . .
 
 RUN chmod +x ./run.sh
 
-# "score"
 
-CMD ["/bin/bash", "./run.sh", "train"]
+
+CMD ["/bin/bash", "./run.sh", "train", "score"]

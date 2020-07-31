@@ -21,7 +21,7 @@ config = yaml.load(stream)
 DATA_INGESTION = config['data_ingestion']
 PREPROCESSING = config['preprocessing']
 FEATURES_ENGINEERING = config['features_engineering']
-MODEL_TRAINING = config['model_training']
+PIPE_TRAINING = config['pipeline_training']
 
 pipeline = Pipeline(
     [
@@ -42,9 +42,12 @@ pipeline = Pipeline(
 
         ('Feature_selector', Feat_Eng.Feature_selector(features_selected=FEATURES_ENGINEERING['features_selected'])), 
 
-        ('SMOTE', SMOTE(random_state=9)), 
+        ('SMOTE', SMOTE(random_state=FEATURES_ENGINEERING['random_sample_smote'])), 
 
-        ('RandomForestClassifier', RandomForestClassifier(max_depth=25, min_samples_split=5, n_estimators=300, random_state=8))
+        ('RandomForestClassifier', RandomForestClassifier(max_depth=PIPE_TRAINING['RandomForestClassifier']['max_depth'], 
+                                                        min_samples_split=PIPE_TRAINING['RandomForestClassifier']['min_samples_split'], 
+                                                        n_estimators=PIPE_TRAINING['RandomForestClassifier']['n_estimators'], 
+                                                        random_state=PIPE_TRAINING['RandomForestClassifier']['random_state']))
 
     ]
 )

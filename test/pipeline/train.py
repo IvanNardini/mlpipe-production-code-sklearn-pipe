@@ -17,7 +17,7 @@ import ruamel.yaml as yaml
 import warnings
 warnings.simplefilter('ignore', yaml.error.UnsafeLoaderWarning)
 
-def train(config):
+def train():
     # Read Data
     data = pd.read_csv(DATA_INGESTION['data_path'])
     target = DATA_INGESTION['data_map']['target']
@@ -35,8 +35,8 @@ def train(config):
     #Train Pipeline
     Pipeline_Fit = pipeline.fit(X_train, y_train)
 
-    # #Save Model
-    # PostProcessing.save(Pipeline_Fit, config['paths']['pipe_path'])
+    #Save Model
+    PostProcessing.save(Pipeline_Fit, PIPE_TRAINING['pipe_path'])
 
 if __name__ == '__main__':
 
@@ -47,12 +47,12 @@ if __name__ == '__main__':
     DATA_INGESTION = config['data_ingestion']
     PREPROCESSING = config['preprocessing']
     FEATURES_ENGINEERING = config['features_engineering']
-    MODEL_TRAINING = config['model_training']
+    PIPE_TRAINING = config['pipeline_training']
 
     logging.basicConfig(format='%(asctime)s %(levelname)s %(message)s', datefmt='%m/%d/%Y %I:%M:%S %p', level=logging.INFO)
     logging.info('Training process started!')
     start = time.time()
-    train(config)
+    train()
     end = time.time()
     duration = end - start
     logging.info('Training process successfully completed!')

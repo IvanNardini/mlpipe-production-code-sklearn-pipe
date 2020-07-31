@@ -30,10 +30,10 @@ if __name__ == '__main__':
     DATA_INGESTION = config['data_ingestion']
     PREPROCESSING = config['preprocessing']
     FEATURES_ENGINEERING = config['features_engineering']
-    MODEL_TRAINING = config['model_training']
+    PIPE_TRAINING = config['pipeline_training']
 
     # Read Data
-    data = pd.read_csv(config['paths']['data_path'])
+    data = pd.read_csv(DATA_INGESTION['data_path'])
     target = DATA_INGESTION['data_map']['target']
     variables = DATA_INGESTION['data_map']['variables']
 
@@ -50,7 +50,7 @@ if __name__ == '__main__':
     logging.basicConfig(format='%(asctime)s %(levelname)s %(message)s', datefmt='%m/%d/%Y %I:%M:%S %p', level=logging.INFO)
     logging.info('Scoring process started!')
     start = time.time()
-    pipeline, predictions = score(config['paths']['pipe_path'], X_test)
+    pipeline, predictions = score(PIPE_TRAINING['pipe_path'], X_test)
     end = time.time()
     duration = end - start
     logging.info('Scoring process successfully completed!')
