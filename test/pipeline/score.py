@@ -14,10 +14,6 @@ import ruamel.yaml as yaml
 import warnings
 warnings.simplefilter('ignore', yaml.error.UnsafeLoaderWarning)
 
-# Read configuration
-stream = open('config.yaml', 'r')
-config = yaml.load(stream)
-
 def score(pipe_path, input_data):
     
     pipeline = PostProcessing.load(pipe_path)
@@ -27,22 +23,31 @@ def score(pipe_path, input_data):
    
 if __name__ == '__main__':
 
-    logging.basicConfig(format='%(asctime)s %(levelname)s %(message)s', datefmt='%m/%d/%Y %I:%M:%S %p', level=logging.INFO)
+  # Read configuration
+    stream = open('config.yaml', 'r')
+    config = yaml.load(stream)
+
+    DATA_INGESTION = config['data_ingestion']
+    PREPROCESSING = config['preprocessing']
+    FEATURES_ENGINEERING = config['features_engineering']
+    MODEL_TRAINING = config['model_training']
 
     # Read Data
     data = pd.read_csv(config['paths']['data_path'])
-    
-    # Encode target
-    target = config['target']
-    variables = [col for col in data.columns if col != target]
-    target_labels = sorted(set(data[target]))
-    target_labels_dic = {label: index for index, label in enumerate(target_labels, 0)}
-    data[target] = data[target].map(target_labels_dic)
-    
+    target = DATA_INGESTION['data_map']['target']
+    variables = DATA_INGESTION['data_map']['variables']
+
+    #Preprocessing
+    flt = data['umbrella_limit']>=0
+    data = data[flt]
+    data[target] = data[target].map(FEATURES_ENGINEERING['target_encoding'])
+
     #Split data
     X_train, X_test, y_train, y_test = train_test_split(data[variables], data[target],
-                                                        test_size=0.20,
-                                                        random_state=1) 
+                                        test_size=PREPROCESSING['train_test_split_params']['test_size'],
+                                        random_state=PREPROCESSING['train_test_split_params']['random_state']) 
+    
+    logging.basicConfig(format='%(asctime)s %(levelname)s %(message)s', datefmt='%m/%d/%Y %I:%M:%S %p', level=logging.INFO)
     logging.info('Scoring process started!')
     start = time.time()
     pipeline, predictions = score(config['paths']['pipe_path'], X_test)

@@ -29,8 +29,6 @@ pipeline = Pipeline(
 
         ('Renamer', Data_Prep.Renamer(renamed_columns=PREPROCESSING['renamed_columns'])),
 
-        ('Anomalizer', Data_Prep.Anomalizer(anomaly_var='umbrella_limit')),
-
         ('Missing_Imputer', Data_Prep.Missing_Imputer(missing_predictors=PREPROCESSING['missing_predictors'], 
                                                     replace='missing')), 
 
