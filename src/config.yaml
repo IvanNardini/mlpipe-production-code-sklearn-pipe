@@ -404,8 +404,8 @@ features_engineering:
     -   umbrella_limit
     -   witnesses
     random_sample_smote: 9
-model_training:
-    model_path: './rf_champion.onnx'
+pipeline_training:
+    pipe_path: './pipe_champion.pkl'
     RandomForestClassifier:
         max_depth: 25
         min_samples_split: 5

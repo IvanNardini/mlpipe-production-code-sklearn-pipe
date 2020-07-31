@@ -1,52 +1,53 @@
 # Read data
-import numpy as np
 import pandas as pd
 
 #Preprocessing
-from imblearn.over_sampling import SMOTE
 from sklearn.model_selection import train_test_split
 
 #Pipeline
 from pipeline import pipeline
 
 #Model
-from sklearn.ensemble import RandomForestClassifier
 from postprocessing import PostProcessing
 
 #Utils
 import logging
 import time
-import joblib
 import ruamel.yaml as yaml
 import warnings
 warnings.simplefilter('ignore', yaml.error.UnsafeLoaderWarning)
 
-# Read configuration
-stream = open('config.yaml', 'r')
-config = yaml.load(stream)
-
 def train():
     # Read Data
-    data = pd.read_csv(config['paths']['data_path'])
+    data = pd.read_csv(DATA_INGESTION['data_path'])
+    target = DATA_INGESTION['data_map']['target']
+    variables = DATA_INGESTION['data_map']['variables']
 
-    # Encode target
-    target_labels = set(data[config['target']])
-    target_labels_dic = {label: index for index, label in enumerate(target_labels, 0)}
-    data[config['target']] = data[config['target']].map(target_labels_dic)
-    
+    #Preprocessing
+    flt = data['umbrella_limit']>=0
+    data = data[flt]
+    data[target] = data[target].map(FEATURES_ENGINEERING['target_encoding'])
+
     #Split data
-    target = 'fraud_reported'
-    variables = [col for col in data.columns if col != target]
     X_train, X_test, y_train, y_test = train_test_split(data[variables], data[target],
-                                                        test_size=0.1,
-                                                        random_state=0)    
+                                        test_size=PREPROCESSING['train_test_split_params']['test_size'],
+                                        random_state=PREPROCESSING['train_test_split_params']['random_state'])    
     #Train Pipeline
     Pipeline_Fit = pipeline.fit(X_train, y_train)
 
     #Save Model
-    PostProcessing.save(Pipeline_Fit, config['paths']['pipe_path'])
+    PostProcessing.save(Pipeline_Fit, PIPE_TRAINING['pipe_path'])
 
 if __name__ == '__main__':
+
+    # Read configuration
+    stream = open('config.yaml', 'r')
+    config = yaml.load(stream)
+
+    DATA_INGESTION = config['data_ingestion']
+    PREPROCESSING = config['preprocessing']
+    FEATURES_ENGINEERING = config['features_engineering']
+    PIPE_TRAINING = config['pipeline_training']
 
     logging.basicConfig(format='%(asctime)s %(levelname)s %(message)s', datefmt='%m/%d/%Y %I:%M:%S %p', level=logging.INFO)
     logging.info('Training process started!')

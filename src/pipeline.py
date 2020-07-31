@@ -2,6 +2,7 @@
 Compile pipeline contains the pipeline object
 '''
 import data_preprocessing as Data_Prep
+import feature_engineering as Feat_Eng
 from imblearn.pipeline import Pipeline
 from imblearn.over_sampling import SMOTE
 from sklearn.ensemble import RandomForestClassifier
@@ -17,24 +18,36 @@ warnings.simplefilter('ignore', yaml.error.UnsafeLoaderWarning)
 stream = open('config.yaml', 'r')
 config = yaml.load(stream)
 
+DATA_INGESTION = config['data_ingestion']
+PREPROCESSING = config['preprocessing']
+FEATURES_ENGINEERING = config['features_engineering']
+PIPE_TRAINING = config['pipeline_training']
+
 pipeline = Pipeline(
     [
-        ('Data_Preparer', Data_Prep.Data_Preparer(dropped_columns=config['dropped_columns'], renamed_columns=config['renamed_columns'])),
+        ('Dropper', Data_Prep.Dropper(dropped_columns=PREPROCESSING['dropped_columns'])),
 
-        ('Missing_Imputer', Data_Prep.Missing_Imputer(missing_predictors=config['missing_predictors'], 
-                                                      replace='missing')), 
+        ('Renamer', Data_Prep.Renamer(renamed_columns=PREPROCESSING['renamed_columns'])),
 
-        ('Binner', Data_Prep.Binner(binning_meta=config['binning_meta'])), 
+        ('Missing_Imputer', Data_Prep.Missing_Imputer(missing_predictors=PREPROCESSING['missing_predictors'], 
+                                                    replace='missing')), 
 
-        ('Encoder', Data_Prep.Encoder(encoding_meta=config['encoding_meta'])),
+        ('Binner', Feat_Eng.Binner(binning_meta=FEATURES_ENGINEERING['binning_meta'])), 
 
-        ('Dumminizer', Data_Prep.Dumminizer(columns_to_dummies=config['nominal_predictors'], dummies_meta=config['dummies_meta'])), 
+        ('Encoder', Feat_Eng.Encoder(encoding_meta=FEATURES_ENGINEERING['encoding_meta'])),
 
-        ('Scaler', Data_Prep.Scaler(columns_to_scale=config['features'])),
+        ('Dumminizer', Feat_Eng.Dumminizer(columns_to_dummies=FEATURES_ENGINEERING['nominal_predictors'])), 
 
-        ('SMOTE', SMOTE(random_state=0)), 
+        ('Scaler', Feat_Eng.Scaler(features=FEATURES_ENGINEERING['features'])),
 
-        ('RandomForestClassifier', RandomForestClassifier(max_depth=25, min_samples_split=5, n_estimators=300, random_state=9))
+        ('Feature_selector', Feat_Eng.Feature_selector(features_selected=FEATURES_ENGINEERING['features_selected'])), 
+
+        ('SMOTE', SMOTE(random_state=FEATURES_ENGINEERING['random_sample_smote'])), 
+
+        ('RandomForestClassifier', RandomForestClassifier(max_depth=PIPE_TRAINING['RandomForestClassifier']['max_depth'], 
+                                                        min_samples_split=PIPE_TRAINING['RandomForestClassifier']['min_samples_split'], 
+                                                        n_estimators=PIPE_TRAINING['RandomForestClassifier']['n_estimators'], 
+                                                        random_state=PIPE_TRAINING['RandomForestClassifier']['random_state']))
 
     ]
 )
