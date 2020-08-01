@@ -92,7 +92,7 @@ preprocessing:
     -   property_damage
     -   police_report_available
     train_test_split_params:
-        test_size: 0.1
+        test_size: 0.10
         random_state: 1
 features_engineering:
     target_encoding:
@@ -405,7 +405,7 @@ features_engineering:
     -   witnesses
     random_sample_smote: 9
 pipeline_training:
-    pipe_path: './pipe_champion.pkl'
+    pipe_path: './pipe_champion.joblib'
     RandomForestClassifier:
         max_depth: 25
         min_samples_split: 5
